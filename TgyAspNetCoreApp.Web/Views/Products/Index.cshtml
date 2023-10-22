@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+@model List<ProductViewModel>
+
+<h1>Products</h1>
+
+@if(TempData["Status"] != null)
+{
+    <div class="alert alert-primary" role="alert">
+        @TempData["Status"]
+    </div>
+}
+
+<a asp-controller="products" asp-action="add">Add Product</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Color</th>
+            <th>Published</th>
+            <th>Expire Time(Months)</th>
+            <th>Comments</th>
+            <th>Publish Date</th>
+            <th>Process</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td>@item.Stock</td>
+                <td>@item.Color</td>
+                <td>
+                    @if (@item.IsPublish)
+                    {
+                    <text>Yes</text>
+                    }
+                    else
+                    {
+                    <text>No</text>
+                    }
+                </td>
+                <td >@item.Expire </td>
+                <td>
+                    @if (@item.Description.Length > 20)
+                    {
+                        @item.Description.Substring(0,20)<text>...</text>
+                    }
+                    else
+                    {
+                        @item.Description
+                    }
+
+                </td>
+                <td>@item.PublishDate</td>
+                <td>
+                    <a asp-controller="products" asp-action="remove" asp-route-id="@item.Id">Remove</a>
+                    <a asp-controller="products" asp-action="Update" asp-route-id="@item.Id">Update</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

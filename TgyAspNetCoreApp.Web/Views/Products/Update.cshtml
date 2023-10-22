@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Update";
+}
+
+<h1> Product Update </h1>
+@model Product
+
+<form asp-controller="Products" asp-action="Update" asp-route-productId="@Model.Id" asp-route-type="type1" method="post">
+
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Product Name</label>
+        <input type="text" class="form-control" asp-for="Name">
+    </div>
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label">Product Price</label>
+        <input class="form-control" asp-for="Price">
+    </div>
+    <div class="mb-3">
+        <label asp-for="Stock" class="form-label">Product Stock</label>
+        <input class="form-control" asp-for="Stock">
+    </div>
+
+    <div class="mb-3">
+        @*  <label asp-for="Color" class="form-label">Product Color</label>
+        <input class="form-control" asp-for="Color"> *@
+
+        <label asp-for="Color" class="form-label">Product Color</label>
+        <select class="form-select" asp-for="Color" asp-items="ViewBag.ColorSelect">
+            <option value="">Please Select a Color</option>
+        </select>
+    </div>
+
+    <div class="form-check">
+        <input class="form-check-input" asp-for="IsPublish">
+        <label class="form-check-label" asp-for="IsPublish">
+            Do you want to Publish?
+        </label>
+    </div>
+
+    <div class="mb-3 mt-3">
+        <span>Expire Time</span>
+        @foreach (var item in ViewBag.Expire as Dictionary<string, int>)
+        {
+            <div class="form-check">
+                <input checked=@(item.Value == ViewBag.ExpireValue ? true : false) class="form-check-input" type="radio" id="@(item.Value)Expire" asp-for="Expire" value="@item.Value">
+                <label class="form-check-label" asp-for="Expire" for="@(item.Value)Expire">
+                    @item.Key
+                </label>
+            </div>
+        }
+    </div>
+
+    <div class="form-floating mb-3">
+        <textarea asp-for="Description" class="form-control" placeholder="Leave a comment here" style="height: 100px"></textarea>
+        <label asp-for="Description">Comments</label>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PublishDate" class="form-label">Publish Date</label>
+        <input class="form-control" asp-for="PublishDate">
+    </div>
+
+    <button type="submit" class="btn btn-primary"> Update Product </button>
+</form>

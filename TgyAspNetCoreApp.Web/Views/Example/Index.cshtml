@@ -1,0 +1,32 @@
+﻿@using TgyAspNetCoreApp.Web.Controllers;
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Example Controller, Index Page</h1>
+
+@model List<Product2>;
+
+@foreach ( var item in Model)
+{
+    <p> @item.Id - @item.Name</p>
+}
+
+@{
+    var Name = ViewBag.Name;
+    <p>@Name</p>
+}
+
+<p>@Name</p>
+<p> @ViewBag.Name </p>
+
+<p> Age : @ViewData["Age"] </p>
+
+<h1>Names</h1>
+@foreach (var item in ViewData["Names"] as List<string>)
+{
+    <p>@item</p>
+}
+
+<p> @ViewBag.Person.Id - @ViewBag.Person.Name - @ViewBag.Person.Age </p>
