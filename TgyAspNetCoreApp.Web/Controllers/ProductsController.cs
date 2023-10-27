@@ -80,39 +80,46 @@ namespace TgyAspNetCoreApp.Web.Controllers
             Product newProduct = new Product(){Name = name, Price = price, Stock = stock, Color = color};
             */
 
-            //2.Töntem Parameter
+            //2.yöntem Parameter
             /*
             string Name,decimal Price,int Stock,string Color --> fonksiyon parametreleri
             Product newProduct = new Product() { Name = Name, Price = Price, Stock = Stock, Color = Color };
             */
 
-            if (ModelState.IsValid)
-            {
-
-                _context.Products.Add(_mapper.Map<Product>(newProduct));
-                _context.SaveChanges();
-
-                TempData["Status"] = "Product added successfully";
-
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                ViewBag.Expire = new Dictionary<string, int>()
+            ViewBag.Expire = new Dictionary<string, int>()
                 {
                     {"1 Month", 1 },
                     {"3 Month", 3 },
                     {"6 Month", 6 },
-                    {"12 Month", 12},       
+                    {"12 Month", 12},
                 };
 
-                ViewBag.ColorSelect = new SelectList(new List<ColorSelectList>() 
+            ViewBag.ColorSelect = new SelectList(new List<ColorSelectList>()
                 {
                     new (){Data = "Blue",Value ="Blue"},
                     new (){Data = "Red",Value ="Red"},
                     new (){Data = "Yellow",Value ="Yellow"}
                 }, "Value", "Data");
 
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Products.Add(_mapper.Map<Product>(newProduct));
+                    _context.SaveChanges();
+
+                    TempData["Status"] = "Product added successfully";
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError(string.Empty, "An error occured while product saving. Please try again later.");
+                    return View();
+                }
+            }
+            else
+            {
                 return View();
             }
 
@@ -151,6 +158,21 @@ namespace TgyAspNetCoreApp.Web.Controllers
             TempData["Status"] = "Product updated successfully";
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet,HttpPost]
+        public IActionResult HasProductName(string Name)
+        {
+            var anyProduct = _context.Products.Any(x => x.Name.ToLower() == Name.ToLower());
+
+            if (anyProduct)
+            {
+                return Json($"Database has a product named \"{Name}\"");
+            }
+            else
+            {
+                return Json(true);
+            }
         }
     }
 }
