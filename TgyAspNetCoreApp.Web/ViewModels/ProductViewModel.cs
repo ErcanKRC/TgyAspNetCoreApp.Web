@@ -30,8 +30,5 @@ namespace TgyAspNetCoreApp.Web.ViewModels
 
         [Required]
         public DateTime? PublishDate { get; set; }
-
-        [Required,EmailAddress(ErrorMessage ="This adress is not valid!")]
-        public string EmailAdress{ get; set; }
     }
 }

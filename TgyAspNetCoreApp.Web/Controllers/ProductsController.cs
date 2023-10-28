@@ -20,6 +20,7 @@ namespace TgyAspNetCoreApp.Web.Controllers
             _context = context;
             _mapper = mapper;
 
+            
             //if(!_context.Products.Any())
             //{
             //    _context.Products.Add(new Product { Name = "Kalem 1", Price = 100, Stock = 58 ,Color="Red"});
@@ -145,14 +146,34 @@ namespace TgyAspNetCoreApp.Web.Controllers
                 new (){Data = "Yellow",Value ="Yellow"}
             }, "Value", "Data", product.Color);
 
-            return View(product);
+            return View(_mapper.Map<ProductViewModel>(product));
         }
 
         [HttpPost]
-        public IActionResult Update(Product updateProduct, int productId, string type)
+        public IActionResult Update(ProductViewModel updateProduct)
         {
-            updateProduct.Id = productId;
-            _context.Products.Update(updateProduct);
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ExpireValue = updateProduct.Expire;
+
+                ViewBag.Expire = new Dictionary<string, int>()
+                {
+                    {"1 Month", 1 },
+                    {"3 Month", 3 },
+                    {"6 Month", 6 },
+                    {"12 Month", 12},
+                };
+
+                ViewBag.ColorSelect = new SelectList(new List<ColorSelectList>() {
+                new (){Data = "Blue",Value ="Blue"},
+                new (){Data = "Red",Value ="Red"},
+                new (){Data = "Yellow",Value ="Yellow"}
+                }, "Value", "Data", updateProduct.Color);
+
+                return View();
+            }
+
+            _context.Products.Update(_mapper.Map<Product>(updateProduct));
             _context.SaveChanges();
 
             TempData["Status"] = "Product updated successfully";
@@ -160,9 +181,10 @@ namespace TgyAspNetCoreApp.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet,HttpPost]
+        [HttpGet, HttpPost]
         public IActionResult HasProductName(string Name)
         {
+            
             var anyProduct = _context.Products.Any(x => x.Name.ToLower() == Name.ToLower());
 
             if (anyProduct)

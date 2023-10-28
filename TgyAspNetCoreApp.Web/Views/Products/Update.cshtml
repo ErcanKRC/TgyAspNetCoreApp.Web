@@ -3,22 +3,25 @@
 }
 
 <h1> Product Update </h1>
-@model Product
+@model ProductViewModel
 
 <form asp-controller="Products" asp-action="Update" asp-route-productId="@Model.Id" asp-route-type="type1" method="post">
 
-
+    <input type="hidden" asp-for="Id" />
     <div class="mb-3">
         <label asp-for="Name" class="form-label">Product Name</label>
         <input type="text" class="form-control" asp-for="Name">
+        <span class="text-danger" asp-validation-for="Name"></span>
     </div>
     <div class="mb-3">
         <label asp-for="Price" class="form-label">Product Price</label>
         <input class="form-control" asp-for="Price">
+        <span class="text-danger" asp-validation-for="Price"></span>
     </div>
     <div class="mb-3">
         <label asp-for="Stock" class="form-label">Product Stock</label>
-        <input class="form-control" asp-for="Stock">
+        <input type="number" class="form-control" asp-for="Stock">
+        <span class="text-danger" asp-validation-for="Stock"></span>
     </div>
 
     <div class="mb-3">
@@ -28,6 +31,7 @@
         <label asp-for="Color" class="form-label">Product Color</label>
         <select class="form-select" asp-for="Color" asp-items="ViewBag.ColorSelect">
             <option value="">Please Select a Color</option>
+            <span class="text-danger" asp-validation-for="Color"></span>
         </select>
     </div>
 
@@ -49,17 +53,26 @@
                 </label>
             </div>
         }
+        <span class="text-danger" asp-validation-for="Expire"></span>
     </div>
 
     <div class="form-floating mb-3">
         <textarea asp-for="Description" class="form-control" placeholder="Leave a comment here" style="height: 100px"></textarea>
         <label asp-for="Description">Comments</label>
+        <span class="text-danger" asp-validation-for="Description"></span>
     </div>
 
     <div class="mb-3">
         <label asp-for="PublishDate" class="form-label">Publish Date</label>
         <input class="form-control" asp-for="PublishDate">
+        <span class="text-danger" asp-validation-for="PublishDate"></span>
     </div>
 
     <button type="submit" class="btn btn-primary"> Update Product </button>
 </form>
+
+@section Scripts
+    {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
