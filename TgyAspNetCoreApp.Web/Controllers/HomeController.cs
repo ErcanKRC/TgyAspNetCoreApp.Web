@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using TgyAspNetCoreApp.Web.Filters;
 using TgyAspNetCoreApp.Web.Models;
 using TgyAspNetCoreApp.Web.ViewModels;
 
 namespace TgyAspNetCoreApp.Web.Controllers
 {
+    [LogFilter]
     [Route("[controller]/[action]")]
     public class HomeController : Controller
     {
@@ -18,9 +20,9 @@ namespace TgyAspNetCoreApp.Web.Controllers
             _appDbContext = context;
             _mapper = mapper;
         }
-        [Route("")]
-        [Route("home")]
-        [Route("home/index")]
+        [Route("/")]
+        [Route("/home")]
+        [Route("/home/index")]
         public IActionResult Index()
         {
             var products = _appDbContext.Products.OrderByDescending(x => x.Id).Select(x => new ProductPartialViewModel()
@@ -33,14 +35,15 @@ namespace TgyAspNetCoreApp.Web.Controllers
 
             ViewBag.ProductListPartialViewModel = new ProductListPartialViewModel()
             {
-               Products = (List<ProductPartialViewModel>)products,
+                Products = (List<ProductPartialViewModel>)products,
             };
 
             return View();
         }
-
+        [CustomExceptionFilter]
         public IActionResult Privacy()
         {
+            //throw new Exception("Database Error.");
             var products = _appDbContext.Products.OrderByDescending(x => x.Id).Select(x => new ProductPartialViewModel()
             {
                 Id = x.Id,
@@ -58,9 +61,11 @@ namespace TgyAspNetCoreApp.Web.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(ErrorViewModel errorViewModel)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            errorViewModel.RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+
+            return View(errorViewModel);
         }
         public IActionResult Visitor()
         {

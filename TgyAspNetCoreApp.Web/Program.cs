@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using TgyAspNetCoreApp.Web.Filters;
 using TgyAspNetCoreApp.Web.Helpers;
 using TgyAspNetCoreApp.Web.Models;
 
@@ -17,6 +18,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddTransient<IHelper,Helper>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+builder.Services.AddScoped < NotFoundFilter >();
 
 var app = builder.Build();
 

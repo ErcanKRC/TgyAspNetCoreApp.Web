@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Composition;
 using System.Drawing;
+using TgyAspNetCoreApp.Web.Filters;
 using TgyAspNetCoreApp.Web.Helpers;
 using TgyAspNetCoreApp.Web.Models;
 using TgyAspNetCoreApp.Web.ViewModels;
 
 namespace TgyAspNetCoreApp.Web.Controllers
 {
+    [Route("[controller]/[action]")]
     public class ProductsController : Controller
     {
         private AppDbContext _context;
@@ -30,6 +32,10 @@ namespace TgyAspNetCoreApp.Web.Controllers
             //    _context.SaveChanges();
             //}
         }
+
+        [CacheResourceFilter]
+        [Route("/products")]
+        [Route("/products/index")]
         public IActionResult Index()
         {
             var products = _context.Products.ToList();
@@ -54,12 +60,15 @@ namespace TgyAspNetCoreApp.Web.Controllers
             return View(_mapper.Map<List<ProductViewModel>>(products));
         }
 
+        [ServiceFilter(typeof(NotFoundFilter))]
         [Route("/product/{productid}", Name ="product")]
         public IActionResult GetById(int productid)
         {
             var product = _context.Products.Find(productid);
             return View(_mapper.Map<ProductViewModel>(product));
         }
+
+        [ServiceFilter(typeof(NotFoundFilter))]
         public IActionResult Remove(int id)
         {
             var product = _context.Products.Find(id);
@@ -69,7 +78,6 @@ namespace TgyAspNetCoreApp.Web.Controllers
 
             return RedirectToAction("Index");
         }
-
 
         [HttpGet]
         public IActionResult Add()
@@ -150,6 +158,7 @@ namespace TgyAspNetCoreApp.Web.Controllers
 
         }
 
+        [ServiceFilter(typeof(NotFoundFilter))]
         public IActionResult Update(int id)
         {
             var product = _context.Products.Find(id);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TgyAspNetCoreApp.Web.Filters;
 
 namespace TgyAspNetCoreApp.Web.Controllers
 {
@@ -7,6 +8,7 @@ namespace TgyAspNetCoreApp.Web.Controllers
         public int Id { get; set; }
         public string Name { get; set; }
     }
+    [CustomResultFilter("x-version","1.0")]
     public class ExampleController : Controller
     {
         public IActionResult Index() //Controller Courses
