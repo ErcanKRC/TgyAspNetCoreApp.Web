@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TgyAspNetCoreApp.Web", "TgyAspNetCoreApp.Web\TgyAspNetCoreApp.Web.csproj", "{28C843F4-D8BF-4577-A2DA-E538FD773674}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TgyAspNetCoreApp.Web", "TgyAspNetCoreApp.Web\TgyAspNetCoreApp.Web.csproj", "{28C843F4-D8BF-4577-A2DA-E538FD773674}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TgyMiddlewareExampleWeb", "TgyMiddlewareExampleWeb\TgyMiddlewareExampleWeb.csproj", "{761067F4-D672-4AF9-AFC9-7D0E806FBDC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{28C843F4-D8BF-4577-A2DA-E538FD773674}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28C843F4-D8BF-4577-A2DA-E538FD773674}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28C843F4-D8BF-4577-A2DA-E538FD773674}.Release|Any CPU.Build.0 = Release|Any CPU
+		{761067F4-D672-4AF9-AFC9-7D0E806FBDC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{761067F4-D672-4AF9-AFC9-7D0E806FBDC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{761067F4-D672-4AF9-AFC9-7D0E806FBDC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{761067F4-D672-4AF9-AFC9-7D0E806FBDC4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
