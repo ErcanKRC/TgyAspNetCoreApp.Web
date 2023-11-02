@@ -1,20 +1,14 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Pages";
 }
+
+<h1>Pages</h1>
+
+<h2>Page: @ViewBag.page</h2>
+<h2>Page Size: @ViewBag.pageSize</h2>
 
 @model List<ProductViewModel>
-
-<h1>Products</h1>
-
-@if(TempData["Status"] != null)
-{
-    <div class="alert alert-primary" role="alert">
-        @TempData["Status"]
-    </div>
-}
-
-<a asp-controller="products" asp-action="add">Add Product</a>
 
 <table class="table">
     <thead>
@@ -29,7 +23,7 @@
             <th>Comments</th>
             <th>Publish Date</th>
             <th>Process</th>
-            
+
         </tr>
     </thead>
     <tbody>
@@ -44,18 +38,20 @@
                 <td>
                     @if (@item.IsPublish)
                     {
-                    <text>Yes</text>
+                        <text>Yes</text>
                     }
                     else
                     {
-                    <text>No</text>
+                        <text>No</text>
                     }
                 </td>
-                <td >@item.Expire </td>
+                <td>@item.Expire </td>
                 <td>
                     @if (@item.Description.Length > 20)
                     {
-                        @item.Description.Substring(0,20)<text>...</text>
+                        @item.Description.Substring(0,20)
+
+                        <text>...</text>
                     }
                     else
                     {
@@ -67,14 +63,9 @@
                 <td>
                     <a asp-controller="products" asp-action="remove" asp-route-id="@item.Id">Remove</a>
                     <a asp-controller="products" asp-action="Update" asp-route-id="@item.Id">Update</a>
-                    <a asp-route="product" asp-route-productid="@item.Id">Go to Product Page</a>
+                    <a asp-controller="products" asp-action="GetById" asp-route-productid="@item.Id">Go to Product Page</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
-<a asp-controller="blog" asp-action="article" asp-route-name="article-name" asp-route-id="58">Go to article</a>
-
-<a asp-route="productpage" asp-route-page="1" asp-route-pagesize="3">Give 3 products from 1 page</a>
-<a asp-controller="products" asp-action="pages" asp-route-page="2" asp-route-pagesize="3">Give 3 products from 2 pages</a>

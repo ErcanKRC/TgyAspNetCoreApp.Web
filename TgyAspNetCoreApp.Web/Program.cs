@@ -35,8 +35,29 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+//blog/abc => blog controller -> article action method 
+//blog/ddd => blog controller -> article action method 
+//app.MapControllerRoute(
+//    name:"",
+//    pattern: "blog/{*article}",
+//    defaults: new {controller = "Blog",action = "Article"});
+
+//app.MapControllerRoute(
+//    name: "article",
+//    pattern: "{controller=Blog}/{action=article}/{name}/{id}");
+
+//app.MapControllerRoute(
+//    name: "pages",
+//    pattern: "{controller}/{action}/{page}/{pagesize}");
+
+//app.MapControllerRoute(
+//    name: "getbyid",
+//    pattern: "{controller}/{action}/{productid}");
+
+app.MapControllers();
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}"); 
 
 app.Run();

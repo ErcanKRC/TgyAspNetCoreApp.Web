@@ -6,7 +6,6 @@
 @model ProductViewModel
 
 <form asp-controller="Products" asp-action="Update" asp-route-productId="@Model.Id" asp-route-type="type1" method="post">
-
     <input type="hidden" asp-for="Id" />
     <div class="mb-3">
         <label asp-for="Name" class="form-label">Product Name</label>

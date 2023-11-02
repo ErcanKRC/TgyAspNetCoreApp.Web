@@ -1,21 +1,15 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+
+    var product = new Product() { Id = 58, Name = "Deneme", Price = 33, Stock = 58};
 }
 
 @section Css
-{
-    <link rel="stylesheet" href="~/css/Example.css" asp-append-version="true" />
-    
+    {
 }
 
 @section Scripts
-{
-    <script type="text/javascript">
-        //alert("Welcome to our page")    
-        $(document).ready(function () {
-            consolo.log("Welcome to our page")
-        })
-    </script>
+    {
 }
 
 <div class="text-center">
@@ -25,6 +19,28 @@
 </div>
 
 
-@*<partial name ="_MenuPartialView" />
-@await Html.PartialAsync("_MenuPartialView")
-@Html.Partial("_MenuPartialView")*@
+<div class="row">
+    <div class="col-md-4">
+        <partial name="~/PartialViews/_ProductListPartialView.cshtml" model="@ViewBag.ProductListPartialViewModel" />
+    </div>
+    <div class="col-md-4">
+
+        @* First Way *@
+        @*@await Component.InvokeAsync("ProductList",new{type = 1})*@
+
+        @* Second Way *@
+        <vc:product-list type="1"></vc:product-list>
+
+    </div>
+    <div class="col-md-4">
+        <italic>Asp .Net Core</italic>
+        
+        <product-show product="product"></product-show>
+
+    </div>
+</div>
+
+<div>
+    <img src="/images/gs.png" />
+    <thumbnails image-src="/images/gs.png"></thumbnails>
+</div>

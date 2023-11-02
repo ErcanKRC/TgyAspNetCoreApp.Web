@@ -3,4 +3,17 @@
 }
 <h1>@ViewData["Title"]</h1>
 
+<div class="row">
+    <div class="col-md-4">
+        <partial name="~/PartialViews/_ProductListPartialView.cshtml" model="@ViewBag.ProductListPartialViewModel" />
+    </div>
+    <div class="col-md-4">
+        @* First Way *@
+        @* @await Component.InvokeAsync("ProductList",new{type = 2}) *@
+
+        @* Second Way *@
+        <vc:product-list type="2"></vc:product-list>
+    </div>
+</div>
+
 <p>Use this page to detail your site's privacy policy.</p>
