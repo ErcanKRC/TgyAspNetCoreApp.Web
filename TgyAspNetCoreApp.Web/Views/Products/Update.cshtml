@@ -3,10 +3,18 @@
 }
 
 <h1> Product Update </h1>
-@model ProductViewModel
+@model ProductUpdateViewModel
 
-<form asp-controller="Products" asp-action="Update" asp-route-productId="@Model.Id" asp-route-type="type1" method="post">
+<form asp-controller="Products" asp-action="Update" asp-route-productId="@Model.Id" asp-route-type="type1" method="post" enctype="multipart/form-data">
+    
     <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ImagePath" />
+
+    <div class="mb-3">
+        <td>
+            <img style="width:100px; height:100px;" src="@(String.IsNullOrEmpty(Model.ImagePath) ? "/images/noimage.png" : $"/images/{Model.ImagePath}")" />
+        </td>
+    </div>
     <div class="mb-3">
         <label asp-for="Name" class="form-label">Product Name</label>
         <input type="text" class="form-control" asp-for="Name">
@@ -14,7 +22,7 @@
     </div>
     <div class="mb-3">
         <label asp-for="Price" class="form-label">Product Price</label>
-        <input class="form-control" asp-for="Price">
+        <input class="form-control" asp-for="Price" >
         <span class="text-danger" asp-validation-for="Price"></span>
     </div>
     <div class="mb-3">
@@ -65,6 +73,11 @@
         <label asp-for="PublishDate" class="form-label">Publish Date</label>
         <input class="form-control" asp-for="PublishDate">
         <span class="text-danger" asp-validation-for="PublishDate"></span>
+    </div>
+
+    <div class="mb-3">
+        <label for="formFileLg" class="form-label">Product Image</label>
+        <input class="form-control form-control-lg" asp-for="Image" type="file">
     </div>
 
     <button type="submit" class="btn btn-primary"> Update Product </button>

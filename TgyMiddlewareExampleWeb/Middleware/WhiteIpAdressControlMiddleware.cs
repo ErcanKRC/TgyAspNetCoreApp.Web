@@ -5,7 +5,7 @@ namespace TgyMiddlewareExampleWeb.Middleware
     public class WhiteIpAdressControlMiddleware
     {
         private readonly RequestDelegate _requestDelegate;
-        private const string WhiteIpAdress = "::2";
+        private const string WhiteIpAdress = "::2"; //::1
 
         public WhiteIpAdressControlMiddleware(RequestDelegate requestDelegate)
         {

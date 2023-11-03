@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.FileProviders;
 using System.Composition;
 using System.Drawing;
 using TgyAspNetCoreApp.Web.Filters;
@@ -16,13 +17,15 @@ namespace TgyAspNetCoreApp.Web.Controllers
         private AppDbContext _context;
         private readonly ProductRepository _productRepository;
         private readonly IMapper _mapper;
-        public ProductsController(AppDbContext context, IMapper mapper)
+        private readonly IFileProvider _fileProvider;
+        public ProductsController(AppDbContext context, IMapper mapper, IFileProvider fileProvider)
         {
             _productRepository = new ProductRepository();
             _context = context;
             _mapper = mapper;
+            _fileProvider = fileProvider;
 
-            
+
             //if(!_context.Products.Any())
             //{
             //    _context.Products.Add(new Product { Name = "Kalem 1", Price = 100, Stock = 58 ,Color="Red"});
@@ -33,7 +36,7 @@ namespace TgyAspNetCoreApp.Web.Controllers
             //}
         }
 
-        [CacheResourceFilter]
+        //[CacheResourceFilter]
         [Route("/products")]
         [Route("/products/index")]
         public IActionResult Index()
@@ -44,14 +47,14 @@ namespace TgyAspNetCoreApp.Web.Controllers
         }
 
         [Route("[action]/{page}/{pageSize}", Name = "productpage")]
-        public IActionResult Pages(int page,int pageSize)
+        public IActionResult Pages(int page, int pageSize)
         {
 
             //page = 1 pagesize=3 => ilk 3 kayıt
             //page = 2 pagesize=3 => ikinci 3 kayıt
             //page = 3 pagesize=3 => üçüncü 3 kayıt
 
-            var products = _context.Products.Skip((page-1)*pageSize).Take(pageSize).ToList();
+            var products = _context.Products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
             ViewBag.page = page;
             ViewBag.pageSize = pageSize;
@@ -61,7 +64,7 @@ namespace TgyAspNetCoreApp.Web.Controllers
         }
 
         [ServiceFilter(typeof(NotFoundFilter))]
-        [Route("/product/{productid}", Name ="product")]
+        [Route("/product/{productid}", Name = "product")]
         public IActionResult GetById(int productid)
         {
             var product = _context.Products.Find(productid);
@@ -119,6 +122,48 @@ namespace TgyAspNetCoreApp.Web.Controllers
             Product newProduct = new Product() { Name = Name, Price = Price, Stock = Stock, Color = Color };
             */
 
+            IActionResult result = null;
+
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+
+                    var product = _mapper.Map<Product>(newProduct);
+
+                    if (newProduct.Image!= null && newProduct.Image.Length >0)
+                    {
+                        var root = _fileProvider.GetDirectoryContents("wwwroot");
+                        var images = root.First(x => x.Name == "images");
+
+                        var randomImageName = Guid.NewGuid() + Path.GetExtension(newProduct.Image.FileName);
+
+                        var path = Path.Combine(images.PhysicalPath, randomImageName);
+                        using var stream = new FileStream(path, FileMode.Create);
+                        newProduct.Image.CopyTo(stream);
+
+                        product.ImagePath = randomImageName;
+                    }
+
+                    _context.Products.Add(product);
+                    _context.SaveChanges();
+
+                    TempData["Status"] = "Product added successfully";
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError(string.Empty, "An error occured while product saving. Please try again later.");
+                    result = View();
+                }
+            }
+            else
+            {
+                result = View();
+            }
+
             ViewBag.Expire = new Dictionary<string, int>()
                 {
                     {"1 Month", 1 },
@@ -134,27 +179,7 @@ namespace TgyAspNetCoreApp.Web.Controllers
                     new (){Data = "Yellow",Value ="Yellow"}
                 }, "Value", "Data");
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Products.Add(_mapper.Map<Product>(newProduct));
-                    _context.SaveChanges();
-
-                    TempData["Status"] = "Product added successfully";
-
-                    return RedirectToAction("Index");
-                }
-                catch (Exception)
-                {
-                    ModelState.AddModelError(string.Empty, "An error occured while product saving. Please try again later.");
-                    return View();
-                }
-            }
-            else
-            {
-                return View();
-            }
+            return result;
 
         }
 
@@ -179,11 +204,11 @@ namespace TgyAspNetCoreApp.Web.Controllers
                 new (){Data = "Yellow",Value ="Yellow"}
             }, "Value", "Data", product.Color);
 
-            return View(_mapper.Map<ProductViewModel>(product));
+            return View(_mapper.Map<ProductUpdateViewModel>(product));
         }
 
         [HttpPost]
-        public IActionResult Update(ProductViewModel updateProduct)
+        public IActionResult Update(ProductUpdateViewModel updateProduct)
         {
             if (!ModelState.IsValid)
             {
@@ -206,6 +231,20 @@ namespace TgyAspNetCoreApp.Web.Controllers
                 return View();
             }
 
+            if (updateProduct.Image != null && updateProduct.Image.Length > 0)
+            {
+                var root = _fileProvider.GetDirectoryContents("wwwroot");
+                var images = root.First(x => x.Name == "images");
+
+                var randomImageName = Guid.NewGuid() + Path.GetExtension(updateProduct.Image.FileName);
+
+                var path = Path.Combine(images.PhysicalPath, randomImageName);
+                using var stream = new FileStream(path, FileMode.Create);
+                updateProduct.Image.CopyTo(stream);
+
+                updateProduct.ImagePath = randomImageName;
+            }
+
             _context.Products.Update(_mapper.Map<Product>(updateProduct));
             _context.SaveChanges();
 
@@ -217,7 +256,7 @@ namespace TgyAspNetCoreApp.Web.Controllers
         [HttpGet, HttpPost]
         public IActionResult HasProductName(string Name)
         {
-            
+
             var anyProduct = _context.Products.Any(x => x.Name.ToLower() == Name.ToLower());
 
             if (anyProduct)

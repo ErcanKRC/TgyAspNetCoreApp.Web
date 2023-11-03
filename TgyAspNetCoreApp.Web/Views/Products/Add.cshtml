@@ -7,7 +7,7 @@
 
 @model ProductViewModel
 
-<form asp-controller="Products" asp-action="Add" method="post">
+<form asp-controller="Products" asp-action="Add" method="post" enctype="multipart/form-data">
 
     @* 1. ve 2. Yöntem
     <label>Product Name :</label>
@@ -87,6 +87,11 @@
         <span class="text-danger" asp-validation-for="PublishDate"></span>
     </div>
      
+    <div class="mb-3">
+        <label for="formFileLg" class="form-label">Product Image</label>
+        <input class="form-control form-control-lg" asp-for="Image" type="file">
+    </div>
+
     <button type="submit" class="btn btn-primary"> Save Product </button>
 </form>
 

@@ -4,11 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TgyAspNetCoreApp.Web.ViewModels
 {
-    public class ProductViewModel
+    public class ProductUpdateViewModel
     {
         public int Id { get; set; }
 
-        [Remote(action: "HasProductName", controller: "Products")]
         [Required,StringLength(50,ErrorMessage ="Max 50 Character")]
         public string? Name { get; set; } 
 
