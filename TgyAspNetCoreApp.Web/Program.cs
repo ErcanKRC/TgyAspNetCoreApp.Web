@@ -17,11 +17,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
 
-builder.Services.AddTransient<IHelper,Helper>();
+builder.Services.AddTransient<IHelper, Helper>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-builder.Services.AddScoped < NotFoundFilter >();
+builder.Services.AddScoped<NotFoundFilter>();
 
 var app = builder.Build();
 
@@ -59,10 +59,10 @@ app.UseAuthorization();
 //    name: "getbyid",
 //    pattern: "{controller}/{action}/{productid}");
 
-app.MapControllers();
+//app.MapControllers();
 
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}"); 
+app.MapControllerRoute(
+name: "default",
+pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

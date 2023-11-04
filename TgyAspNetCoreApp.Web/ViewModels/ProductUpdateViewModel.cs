@@ -34,6 +34,8 @@ namespace TgyAspNetCoreApp.Web.ViewModels
         [ValidateNever]
         public IFormFile? Image{ get; set; }
         [ValidateNever]
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
+
+        public int CategoryId { get; set; }
     }
 }

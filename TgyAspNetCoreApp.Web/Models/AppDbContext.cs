@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Core.Types;
+using TgyAspNetCoreApp.Web.Models;
 
 namespace TgyAspNetCoreApp.Web.Models
 {
@@ -12,6 +13,7 @@ namespace TgyAspNetCoreApp.Web.Models
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Visitor> Visitors { get; set; }
+        public DbSet<Category> Category { get; set; }
 
     }
 }

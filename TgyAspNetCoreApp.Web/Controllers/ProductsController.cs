@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using System.Composition;
 using System.Drawing;
@@ -41,9 +42,23 @@ namespace TgyAspNetCoreApp.Web.Controllers
         [Route("/products/index")]
         public IActionResult Index()
         {
-            var products = _context.Products.ToList();
+            List<ProductViewModel> products = _context.Products.Include(x => x.Category).Select(x => new ProductViewModel()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                CategoryName = x.Category.Name,
+                Color = x.Color,
+                Expire = x.Expire,
+                ImagePath = x.ImagePath,
+                IsPublish = x.IsPublish,
+                Price = x.Price,
+                PublishDate = x.PublishDate,
+                Stock = x.Stock
+            }).ToList();
 
-            return View(_mapper.Map<List<ProductViewModel>>(products));
+
+            return View(products);
         }
 
         [Route("[action]/{page}/{pageSize}", Name = "productpage")]
@@ -99,6 +114,9 @@ namespace TgyAspNetCoreApp.Web.Controllers
                 new (){Data = "Red",Value ="Red"},
                 new (){Data = "Yellow",Value ="Yellow"}
             }, "Value", "Data");
+
+            var categories = _context.Category.ToList();
+            ViewBag.Categories = new SelectList(categories,"Id","Name");
 
             return View();
         }
@@ -163,6 +181,8 @@ namespace TgyAspNetCoreApp.Web.Controllers
             {
                 result = View();
             }
+            var categories = _context.Category.ToList();
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
 
             ViewBag.Expire = new Dictionary<string, int>()
                 {
@@ -204,6 +224,9 @@ namespace TgyAspNetCoreApp.Web.Controllers
                 new (){Data = "Yellow",Value ="Yellow"}
             }, "Value", "Data", product.Color);
 
+            var categories = _context.Category.ToList();
+            ViewBag.Categories = new SelectList(categories, "Id", "Name");
+
             return View(_mapper.Map<ProductUpdateViewModel>(product));
         }
 
@@ -227,6 +250,9 @@ namespace TgyAspNetCoreApp.Web.Controllers
                 new (){Data = "Red",Value ="Red"},
                 new (){Data = "Yellow",Value ="Yellow"}
                 }, "Value", "Data", updateProduct.Color);
+
+                var categories = _context.Category.ToList();
+                ViewBag.Categories = new SelectList(categories, "Id", "Name",updateProduct.CategoryId);
 
                 return View();
             }

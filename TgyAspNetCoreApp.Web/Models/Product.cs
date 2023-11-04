@@ -12,5 +12,7 @@
         public string Description { get; set; }
         public DateTime? PublishDate { get; set; }
         public string? ImagePath { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
     } 
 }

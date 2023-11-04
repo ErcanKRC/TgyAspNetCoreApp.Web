@@ -76,6 +76,14 @@
     </div>
 
     <div class="mb-3">
+        <label asp-for="CategoryId" class="form-label">Product Category</label>
+        <select class="form-select" asp-for="CategoryId" asp-items="ViewBag.Categories">
+            <option value="">Please Select a Category</option>
+        </select>
+        <span class="text-danger" asp-validation-for="Color"></span>
+    </div>
+
+    <div class="mb-3">
         <label for="formFileLg" class="form-label">Product Image</label>
         <input class="form-control form-control-lg" asp-for="Image" type="file">
     </div>
